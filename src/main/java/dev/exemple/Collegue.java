@@ -26,6 +26,15 @@ public class Collegue {
 		this.photoUrl = photoUrl;
 	}
 
+	public Collegue(String nom, String prenoms, String email, LocalDate dateDeNaissance, String photoUrl) {
+		super();
+		this.nom = nom;
+		this.prenoms = prenoms;
+		this.email = email;
+		this.dateDeNaissance = dateDeNaissance;
+		this.photoUrl = photoUrl;
+	}
+
 	/**
 	 * Getter
 	 * 
