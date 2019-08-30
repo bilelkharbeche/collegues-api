@@ -2,8 +2,19 @@ package dev.exemple;
 
 import java.time.LocalDate;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "COLLEGUE")
 public class Collegue {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 	private String matricule;
 	private String nom;
 	private String prenoms;
@@ -33,6 +44,25 @@ public class Collegue {
 		this.email = email;
 		this.dateDeNaissance = dateDeNaissance;
 		this.photoUrl = photoUrl;
+	}
+
+	/**
+	 * Getter
+	 * 
+	 * @return the id
+	 */
+	public Integer getId() {
+		return id;
+	}
+
+	/**
+	 * Setter
+	 * 
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	/**

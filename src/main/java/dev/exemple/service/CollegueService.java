@@ -1,48 +1,55 @@
 package dev.exemple.service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import dev.exemple.Collegue;
 import dev.exemple.exception.CollegueInvalideException;
 import dev.exemple.exception.CollegueNonTrouveException;
+import dev.exemple.repository.CollegueRepository;
 
+@Component
 public class CollegueService {
 
-	private Map<String, Collegue> data = new HashMap<>();
+	private static final Logger LOG = LoggerFactory.getLogger(CollegueService.class);
 
-	public CollegueService() {
-		// TODO alimenter data avec des données fictives
-		// Pour générer un matricule : `UUID.randomUUID().toString()
+	@Autowired
+	private CollegueRepository collegueRepository;
 
-		String matId1 = UUID.randomUUID().toString();
-		String matId2 = UUID.randomUUID().toString();
-		String matId3 = UUID.randomUUID().toString();
-		String matId4 = UUID.randomUUID().toString();
+	@Autowired
+	CollegueValidator collValidator;
 
-		data.put(matId1, new Collegue(matId1, "KHARBECHE", "Bilel", "test@hotmail.fr", LocalDate.of(1997, 05, 06),
-				"URLDEMALADE"));
-		data.put(matId2, new Collegue(matId2, "KHARBECHE2", "Bilel2", "test@hotmail.fr2", LocalDate.of(1997, 05, 06),
-				"URLDEMALADE2"));
-		data.put(matId3, new Collegue(matId3, "KHARBECHE3", "Bilel3", "test@hotmail.fr3", LocalDate.of(1997, 05, 06),
-				"URLDEMALADE3"));
-		data.put(matId4, new Collegue(matId4, "KHARBECHE4", "Bilel4", "test@hotmail.fr4", LocalDate.of(1997, 05, 06),
-				"URLDEMALADE4"));
-	}
+	// DataUtils dataUtils;
+
+	// private Map<String, Collegue> data;
+
+	// @Autowired (optionnel)
+	// public CollegueService(CollegueValidator collValidator, DataUtils
+	// dataUtils) {
+	// super();
+	// this.collValidator = collValidator;
+	// this.dataUtils = dataUtils;
+	// }
+
+	// @PostConstruct
+	// public void init() {
+	// // this.data = this.dataUtils.CreationCollegue();
+	// }
 
 	public List<Collegue> rechercherParNom(String nomRecherche) {
 		// TODO retourner une liste de collègues dont le nom est fourni
-		List<Collegue> listeColl = new ArrayList<>();
+		List<Collegue> listeColl = collegueRepository.findByNom(nomRecherche);
 
-		for (Collegue collegue : data.values()) {
-			if (collegue.getNom().equals(nomRecherche)) {
-				listeColl.add(collegue);
-			}
-		}
+		// for (Collegue collegue : data.values()) {
+		// if (collegue.getNom().equals(nomRecherche)) {
+		// listeColl.add(collegue);
+		// }
+		// }
 
 		return listeColl;
 	}
@@ -53,54 +60,77 @@ public class CollegueService {
 		// TODO retourner une exception `CollegueNonTrouveException` (à créer)
 		// si le matricule ne correspond à aucun collègue
 
-		Collegue collegue = data.get(matriculeRecherche);
+		Collegue collegue = collegueRepository.findByMatricule(matriculeRecherche);
 
 		if (collegue == null) {
 			throw new CollegueNonTrouveException("Collegue non trouvé");
 		}
-		return collegue;
 
+		return collegue;
 	}
 
 	public Collegue ajouterUnCollegue(Collegue collegueAAjouter) {
 
-		if (collegueAAjouter.getNom().length() < 2 || collegueAAjouter.getPrenoms().length() < 2) {
-			throw new CollegueInvalideException("Le nom et les prénoms doivent faire plus de deux caractères");
-		}
-
-		if (collegueAAjouter.getEmail().length() < 3 || !collegueAAjouter.getEmail().contains("@")) {
-			throw new CollegueInvalideException("L'email doit posséder 3 caractères minimum et un '@'");
-		}
-
-		if (!collegueAAjouter.getPhotoUrl().startsWith("http")) {
-			throw new CollegueInvalideException("L'url doit commencer par 'http'");
-		}
-
-		if (LocalDate.now().getYear() - collegueAAjouter.getDateDeNaissance().getYear() < 18) {
-			throw new CollegueInvalideException("L'âge doit être supérieur ou égal à 18");
-		}
-
-		String collMat = UUID.randomUUID().toString();
-		collegueAAjouter.setMatricule(collMat);
-
-		data.put(collMat, collegueAAjouter);
+		collValidator.validerCollegue(collegueAAjouter);
+		// data.put(collegueAAjouter.getMatricule(), collegueAAjouter);
+		collegueRepository.save(collegueAAjouter);
 
 		return collegueAAjouter;
+	}
 
-		// TODO Vérifier que le nom et les prenoms ont chacun au moins 2
-		// caractères
+	@Transactional
+	public Collegue modifierEmail(String matricule, String email) {
+
+		Collegue collegue = collegueRepository.findByMatricule(matricule);
+
+		if (collegue == null) {
+			throw new CollegueNonTrouveException("Collegue non trouvé");
+		}
+
+		if (collegue.getEmail().length() < 3 || !collegue.getEmail().contains("@")) {
+			throw new CollegueInvalideException("L'adresse mail doit comporter au moins 3 caractères et un '@'");
+		}
+
+		collegue.setEmail(email);
+
+		return collegue;
+
+		// TODO retourner une exception `CollegueNonTrouveException`
+		// si le matricule ne correspond à aucun collègue
+
 		// TODO Vérifier que l'email a au moins 3 caractères et contient `@`
+		// TODO Si la règle ci-dessus n'est pas valide, générer une exception :
+		// `CollegueInvalideException`. avec un message approprié.
+
+		// TODO Modifier le collègue
+	}
+
+	public Collegue modifierPhotoUrl(String matricule, String photoUrl) {
+
+		// Collegue collegue = data.get(matricule);
+		//
+		// if (collegue == null) {
+		// throw new CollegueNonTrouveException("Collegue non trouvé");
+		// }
+		//
+		// if (!collegue.getPhotoUrl().startsWith("http")) {
+		// throw new CollegueInvalideException("L'url doit commencer par
+		// 'http'");
+		// }
+		//
+		// collegue.setPhotoUrl(photoUrl);
+		//
+		// return collegue;
+		return null;
+
+		// TODO retourner une exception `CollegueNonTrouveException`
+		// si le matricule ne correspond à aucun collègue
+
 		// TODO Vérifier que la photoUrl commence bien par `http`
-		// TODO Vérifier que la date de naissance correspond à un age >= 18
-		// TODO Si une des règles ci-dessus n'est pas valide, générer une
-		// exception :
-		// `CollegueInvalideException`.
+		// TODO Si la règle ci-dessus n'est pas valide, générer une exception :
+		// `CollegueInvalideException`. avec un message approprié.
 
-		// TODO générer un matricule pour ce collègue
-		// (`UUID.randomUUID().toString()`)
-
-		// TODO Sauvegarder le collègue
-
+		// TODO Modifier le collègue
 	}
 
 }

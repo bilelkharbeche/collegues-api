@@ -3,9 +3,11 @@ package dev.exemple.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +24,8 @@ import dev.exemple.service.CollegueService;
 @RestController
 public class CollegueController {
 
-	CollegueService collService = new CollegueService();
+	@Autowired
+	CollegueService collService;
 
 	@RequestMapping(value = "/collegues", method = RequestMethod.GET)
 	public List<String> findByName(@RequestParam String nom) {
@@ -52,12 +55,19 @@ public class CollegueController {
 		Collegue coll = collService.ajouterUnCollegue(collegue);
 
 		return coll;
+	}
 
+	@PatchMapping(value = "collegues/{matricule}")
+	public Collegue modifColl(@PathVariable String matricule, @RequestBody String email) {
+
+		Collegue coll = collService.modifierEmail(matricule, email);
+
+		return coll;
 	}
 
 	@ExceptionHandler(value = CollegueNonTrouveException.class)
 	protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
-		String bodyOfResponse = "Collegue  non trouvé";
+		String bodyOfResponse = "Collegue non trouvé";
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(bodyOfResponse);
 	}
 
