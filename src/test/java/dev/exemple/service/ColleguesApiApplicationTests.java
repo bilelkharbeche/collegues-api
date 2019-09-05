@@ -1,11 +1,13 @@
 package dev.exemple.service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import dev.exemple.Collegue;
@@ -17,6 +19,8 @@ public class ColleguesApiApplicationTests {
 
 	@Autowired
 	CollegueService collServ;
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	@Test(expected = CollegueInvalideException.class)
 	public void NameTest() {
@@ -63,7 +67,7 @@ public class ColleguesApiApplicationTests {
 	@Test(expected = CollegueInvalideException.class)
 	public void ModfiMailArrobase() {
 		Collegue collegue = new Collegue("blabla", "kharbeche", "Bilel", "elll", LocalDate.of(1997, 05, 06),
-				"http://www.urlDeMalade");
+				"http://www.urlDeMalade", passwordEncoder.encode("pass1"), Arrays.asList("ROLE_ADMIN", "ROLE_USER"));
 
 		collServ.ajouterUnCollegue(collegue);
 		collServ.modifierEmail(collegue.getMatricule(), collegue.getEmail());
@@ -72,7 +76,7 @@ public class ColleguesApiApplicationTests {
 	@Test(expected = CollegueInvalideException.class)
 	public void ModfiMailTropCourt() {
 		Collegue collegue = new Collegue("blabla", "kharbeche", "Bilel", "e@", LocalDate.of(1997, 05, 06),
-				"http://www.urlDeMalade");
+				"http://www.urlDeMalade", passwordEncoder.encode("pass1"), Arrays.asList("ROLE_ADMIN", "ROLE_USER"));
 
 		collServ.ajouterUnCollegue(collegue);
 		collServ.modifierEmail(collegue.getMatricule(), collegue.getEmail());

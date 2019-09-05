@@ -24,32 +24,9 @@ public class CollegueService {
 	@Autowired
 	CollegueValidator collValidator;
 
-	// DataUtils dataUtils;
-
-	// private Map<String, Collegue> data;
-
-	// @Autowired (optionnel)
-	// public CollegueService(CollegueValidator collValidator, DataUtils
-	// dataUtils) {
-	// super();
-	// this.collValidator = collValidator;
-	// this.dataUtils = dataUtils;
-	// }
-
-	// @PostConstruct
-	// public void init() {
-	// // this.data = this.dataUtils.CreationCollegue();
-	// }
-
 	public List<Collegue> rechercherParNom(String nomRecherche) {
 		// TODO retourner une liste de collègues dont le nom est fourni
 		List<Collegue> listeColl = collegueRepository.findByNom(nomRecherche);
-
-		// for (Collegue collegue : data.values()) {
-		// if (collegue.getNom().equals(nomRecherche)) {
-		// listeColl.add(collegue);
-		// }
-		// }
 
 		return listeColl;
 	}
@@ -72,7 +49,6 @@ public class CollegueService {
 	public Collegue ajouterUnCollegue(Collegue collegueAAjouter) {
 
 		collValidator.validerCollegue(collegueAAjouter);
-		// data.put(collegueAAjouter.getMatricule(), collegueAAjouter);
 		collegueRepository.save(collegueAAjouter);
 
 		return collegueAAjouter;
