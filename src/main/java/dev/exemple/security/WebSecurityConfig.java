@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// non utilisée dans le cadre d'une Web API
 		http.csrf().disable().authorizeRequests()
 				// un GET /auth n'est pas soumise à authentification
-				.antMatchers("/auth").permitAll()
+				.antMatchers("/auth").permitAll().antMatchers("/page/auth").permitAll()
 				// URL /admin/** ne sont accessible qu'aux rôles ADMIN
 				.antMatchers("/admin").hasRole("ADMIN")
 				// un GET /exemples n'est pas soumise à authentification
