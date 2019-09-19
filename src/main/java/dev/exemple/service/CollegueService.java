@@ -1,6 +1,7 @@
 package dev.exemple.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,7 @@ public class CollegueService {
 	public Collegue ajouterUnCollegue(Collegue collegueAAjouter) {
 
 		collValidator.validerCollegue(collegueAAjouter);
+		collegueAAjouter.setMatricule(UUID.randomUUID().toString());
 		collegueRepository.save(collegueAAjouter);
 
 		return collegueAAjouter;
