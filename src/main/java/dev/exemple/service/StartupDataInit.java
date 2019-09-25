@@ -26,8 +26,8 @@ public class StartupDataInit {
 	public void init() {
 
 		collegueRepository.save(new Collegue(UUID.randomUUID().toString(), "KHARBECHE", "Bilel", "test@hotmail.fr",
-				LocalDate.of(1997, 05, 06), "URLDEMALADE", passwordEncoder.encode("pass1"),
-				Arrays.asList("ROLE_ADMIN", "ROLE_USER")));
+				LocalDate.of(1997, 05, 06), "https://www.bing.com/th?id=OIP.4bw-bn6TArZf54StdtBlSwHaFj&pid=Api&rs=1",
+				passwordEncoder.encode("pass1"), Arrays.asList("ROLE_ADMIN", "ROLE_USER")));
 		collegueRepository.save(new Collegue(UUID.randomUUID().toString(), "KHARBECHE2", "Bilel2", "test@hotmail.fr2",
 				LocalDate.of(1997, 05, 06), "URLDEMALADE2", passwordEncoder.encode("pass2"),
 				Arrays.asList("ROLE_USER")));
