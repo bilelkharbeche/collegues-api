@@ -57,58 +57,62 @@ public class CollegueService {
 	}
 
 	@Transactional
-	public Collegue modifierEmail(String matricule, String email) {
-
-		Collegue collegue = collegueRepository.findByMatricule(matricule);
-
-		if (collegue == null) {
-			throw new CollegueNonTrouveException("Collegue non trouvé");
-		}
-
-		if (collegue.getEmail().length() < 3 || !collegue.getEmail().contains("@")) {
-			throw new CollegueInvalideException("L'adresse mail doit comporter au moins 3 caractères et un '@'");
-		}
-
-		collegue.setEmail(email);
-
-		return collegue;
+	public Collegue modifierEmail(String matricule, Collegue collegue) {
 
 		// TODO retourner une exception `CollegueNonTrouveException`
 		// si le matricule ne correspond à aucun collègue
 
-		// TODO Vérifier que l'email a au moins 3 caractères et contient `@`
-		// TODO Si la règle ci-dessus n'est pas valide, générer une exception :
-		// `CollegueInvalideException`. avec un message approprié.
+		Collegue coll = collegueRepository.findByMatricule(matricule);
 
-		// TODO Modifier le collègue
+		if (coll == null) {
+			throw new CollegueNonTrouveException("Ce matricule n'existe pas");
+		}
+
+		if (collegue.getEmail() != null) {
+			if (collegue.getEmail().length() < 3) {
+				throw new CollegueInvalideException("L'email est trop court");
+			}
+			if (!collegue.getEmail().contains("@")) {
+				throw new CollegueInvalideException("L'email n'a pas d'@");
+			}
+		} else {
+			throw new CollegueInvalideException("L'email est vide");
+		}
+
+		coll.setEmail(collegue.getEmail());
+		return coll;
 	}
 
-	public Collegue modifierPhotoUrl(String matricule, String photoUrl) {
-
-		// Collegue collegue = data.get(matricule);
-		//
-		// if (collegue == null) {
-		// throw new CollegueNonTrouveException("Collegue non trouvé");
-		// }
-		//
-		// if (!collegue.getPhotoUrl().startsWith("http")) {
-		// throw new CollegueInvalideException("L'url doit commencer par
-		// 'http'");
-		// }
-		//
-		// collegue.setPhotoUrl(photoUrl);
-		//
-		// return collegue;
-		return null;
+	public Collegue modifierPhotoUrl(String matricule, Collegue collegue) {
 
 		// TODO retourner une exception `CollegueNonTrouveException`
 		// si le matricule ne correspond à aucun collègue
 
-		// TODO Vérifier que la photoUrl commence bien par `http`
-		// TODO Si la règle ci-dessus n'est pas valide, générer une exception :
-		// `CollegueInvalideException`. avec un message approprié.
+		Collegue coll = collegueRepository.findByMatricule(matricule);
 
-		// TODO Modifier le collègue
+		if (coll == null) {
+			throw new CollegueNonTrouveException("Ce matricule n'existe pas");
+		}
+
+		if (collegue.getPhotoUrl() != null) {
+			if (!collegue.getPhotoUrl().startsWith("http")) {
+				throw new CollegueInvalideException("L'url ne commence pas par http");
+			}
+		} else {
+			throw new CollegueInvalideException("L'url est vide");
+		}
+
+		coll.setPhotoUrl(collegue.getPhotoUrl());
+
+		return coll;
 	}
 
+	// TODO retourner une exception `CollegueNonTrouveException`
+	// si le matricule ne correspond à aucun collègue
+
+	// TODO Vérifier que la photoUrl commence bien par `http`
+	// TODO Si la règle ci-dessus n'est pas valide, générer une exception :
+	// `CollegueInvalideException`. avec un message approprié.
+
+	// TODO Modifier le collègue
 }

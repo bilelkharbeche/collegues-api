@@ -57,10 +57,17 @@ public class CollegueController {
 	}
 
 	@PatchMapping(value = "collegues/{matricule}")
-	public Collegue modifColl(@PathVariable String matricule, @RequestBody String email) {
+	public Collegue modifColl(@PathVariable String matricule, @RequestBody Collegue collegue) {
 
-		Collegue coll = collService.modifierEmail(matricule, email);
+		Collegue coll = null;
 
+		if (collegue.getEmail() != null) {
+			coll = collService.modifierEmail(matricule, collegue);
+		}
+
+		if (collegue.getPhotoUrl() != null) {
+			coll = collService.modifierPhotoUrl(matricule, collegue);
+		}
 		return coll;
 	}
 
