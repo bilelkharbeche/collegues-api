@@ -80,6 +80,8 @@ public class CollegueService {
 		}
 
 		coll.setEmail(collegue.getEmail());
+		collegueRepository.save(coll);
+
 		return coll;
 	}
 
@@ -103,6 +105,7 @@ public class CollegueService {
 		}
 
 		coll.setPhotoUrl(collegue.getPhotoUrl());
+		collegueRepository.save(coll);
 
 		return coll;
 	}
