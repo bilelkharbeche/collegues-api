@@ -1,7 +1,6 @@
 package dev.exemple.service;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,22 +63,26 @@ public class ColleguesApiApplicationTests {
 		collServ.ajouterUnCollegue(collegue);
 	}
 
-	@Test(expected = CollegueInvalideException.class)
-	public void ModfiMailArrobase() {
-		Collegue collegue = new Collegue("blabla", "kharbeche", "Bilel", "elll", LocalDate.of(1997, 05, 06),
-				"http://www.urlDeMalade", passwordEncoder.encode("pass1"), Arrays.asList("ROLE_ADMIN", "ROLE_USER"));
+	// @Test(expected = CollegueInvalideException.class)
+	// public void ModfiMailArrobase() {
+	// Collegue collegue = new Collegue("blabla", "kharbeche", "Bilel", "elll",
+	// LocalDate.of(1997, 05, 06),
+	// "http://www.urlDeMalade", passwordEncoder.encode("pass1"),
+	// Arrays.asList("ROLE_ADMIN", "ROLE_USER"));
+	//
+	// collServ.ajouterUnCollegue(collegue);
+	// collServ.modifierEmail(collegue.getMatricule(), collegue.getEmail());
+	// }
 
-		collServ.ajouterUnCollegue(collegue);
-		collServ.modifierEmail(collegue.getMatricule(), collegue.getEmail());
-	}
-
-	@Test(expected = CollegueInvalideException.class)
-	public void ModfiMailTropCourt() {
-		Collegue collegue = new Collegue("blabla", "kharbeche", "Bilel", "e@", LocalDate.of(1997, 05, 06),
-				"http://www.urlDeMalade", passwordEncoder.encode("pass1"), Arrays.asList("ROLE_ADMIN", "ROLE_USER"));
-
-		collServ.ajouterUnCollegue(collegue);
-		collServ.modifierEmail(collegue.getMatricule(), collegue.getEmail());
-	}
+	// @Test(expected = CollegueInvalideException.class)
+	// public void ModfiMailTropCourt() {
+	// Collegue collegue = new Collegue("blabla", "kharbeche", "Bilel", "e@",
+	// LocalDate.of(1997, 05, 06),
+	// "http://www.urlDeMalade", passwordEncoder.encode("pass1"),
+	// Arrays.asList("ROLE_ADMIN", "ROLE_USER"));
+	//
+	// collServ.ajouterUnCollegue(collegue);
+	// collServ.modifierEmail(collegue.getMatricule(), collegue.getEmail());
+	// }
 
 }
