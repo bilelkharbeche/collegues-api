@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import dev.exemple.Collegue;
+import dev.exemple.controller.DTO.CollegueDtoPhoto;
 import dev.exemple.exception.CollegueInvalideException;
 import dev.exemple.exception.CollegueNonTrouveException;
 import dev.exemple.repository.CollegueRepository;
@@ -24,6 +25,12 @@ public class CollegueService {
 
 	@Autowired
 	CollegueValidator collValidator;
+
+	public List<CollegueDtoPhoto> afficherCollegueMatEtPhoto() {
+		List<CollegueDtoPhoto> listeColl = collegueRepository.findByMatAndPhoto();
+
+		return listeColl;
+	}
 
 	public List<Collegue> rechercherParNom(String nomRecherche) {
 		// TODO retourner une liste de collègues dont le nom est fourni

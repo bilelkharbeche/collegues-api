@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import dev.exemple.Collegue;
+import dev.exemple.controller.DTO.CollegueDtoPhoto;
 import dev.exemple.exception.CollegueNonTrouveException;
 import dev.exemple.service.CollegueService;
 
@@ -46,6 +47,13 @@ public class CollegueController {
 		Collegue collegue = collService.rechercherParMatricule(matricule);
 
 		return collegue;
+	}
+
+	@GetMapping(value = "collegues/photos")
+	public List<CollegueDtoPhoto> afficherPhotoEtMat() {
+		List<CollegueDtoPhoto> coll = collService.afficherCollegueMatEtPhoto();
+
+		return coll;
 	}
 
 	@PostMapping("/collegues")
