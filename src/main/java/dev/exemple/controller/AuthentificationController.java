@@ -47,9 +47,9 @@ public class AuthentificationController {
 		String infos = null;
 
 		if (collegueCo.isPresent() == true) {
-			infos = "{\nmatricule : ".concat(collegueCo.get().getMatricule()).concat("\nnom : ")
-					.concat(collegueCo.get().getNom()).concat("\nprenoms : ").concat(collegueCo.get().getPrenoms())
-					.concat("\nrôles : ").concat(collegueCo.get().getRoles().toString().concat("\n}"));
+			infos = "{\nmatricule:".concat(collegueCo.get().getMatricule()).concat("\nnom:")
+					.concat(collegueCo.get().getNom()).concat("\nprenoms:").concat(collegueCo.get().getPrenoms())
+					.concat("\nrôles:").concat(collegueCo.get().getRoles().toString().concat("\n}"));
 		}
 
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(infos);
